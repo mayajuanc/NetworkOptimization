@@ -4,7 +4,7 @@
 
 ## Tabla de Contenidos
 1. [Descripción](#descripción) (#descripción)
-2. [Instalación](#instalación)
+2. [Instalación](#instalación) (#descripción)
 3. [Uso](#uso)
 4. [Contribuciones](#contribuciones)
 5. [Licencia](#licencia)
