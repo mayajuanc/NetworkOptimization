@@ -3,7 +3,7 @@
 
 
 ## Tabla de Contenidos
-1. [Descripción](#descripción)
+1. [Descripción](#descripción) (#descripción)
 2. [Instalación](#instalación)
 3. [Uso](#uso)
 4. [Contribuciones](#contribuciones)
