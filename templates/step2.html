@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply Chain Network Optimization - Step 2</title>
+</head>
+<body>
+    <h1>Step 2: Enter Data for Optimization</h1>
+    <form action="/optimize" method="POST">
+
+        <!-- Passing hidden network structure data -->
+        <input type="hidden" name="num_products" value="{{ num_products }}">
+        <input type="hidden" name="num_factories" value="{{ num_factories }}">
+        <input type="hidden" name="num_warehouses" value="{{ num_warehouses }}">
+        <input type="hidden" name="num_customers" value="{{ num_customers }}">
+
+        <!-- Starting Inventory for Product-Factories -->
+        <h2>Starting Inventory (Product-Factory)</h2>
+        {% for p in range(num_products) %}
+            {% for f in range(num_factories) %}
+                <label for="starting_inventory_pf_{{ p }}_{{ f }}">Product {{ p+1 }} at Factory {{ f+1 }}:</label>
+                <input type="number" id="starting_inventory_pf_{{ p }}_{{ f }}" name="starting_inventory_pf_{{ p }}_{{ f }}" required><br>
+            {% endfor %}
+        {% endfor %}
+
+        <!-- Starting Inventory for Product-Warehouses -->
+        <h2>Starting Inventory (Product-Warehouse)</h2>
+        {% for p in range(num_products) %}
+            {% for w in range(num_warehouses) %}
+                <label for="starting_inventory_pw_{{ p }}_{{ w }}">Product {{ p+1 }} at Warehouse {{ w+1 }}:</label>
+                <input type="number" id="starting_inventory_pw_{{ p }}_{{ w }}" name="starting_inventory_pw_{{ p }}_{{ w }}" required><br>
+            {% endfor %}
+        {% endfor %}
+
+        <!-- Production and Storage Capacities -->
+        <h2>Production and Storage Capacities</h2>
+        {% for f in range(num_factories) %}
+            <label for="production_capacity_{{ f }}">Factory {{ f+1 }} Production Capacity (Units):</label>
+            <input type="number" id="production_capacity_{{ f }}" name="production_capacity_{{ f }}" required><br>
+        {% endfor %}
+
+        {% for w in range(num_warehouses) %}
+            <label for="storage_capacity_{{ w }}">Warehouse {{ w+1 }} Storage Capacity (Units):</label>
+            <input type="number" id="storage_capacity_{{ w }}" name="storage_capacity_{{ w }}" required><br>
+        {% endfor %}
+
+        <!-- Production and Storage Costs -->
+        <h2>Production and Storage Costs</h2>
+        {% for f in range(num_factories) %}
+            <label for="production_cost_{{ f }}">Factory {{ f+1 }} Production Cost (Per Unit):</label>
+            <input type="number" id="production_cost_{{ f }}" name="production_cost_{{ f }}" required><br>
+        {% endfor %}
+
+        {% for w in range(num_warehouses) %}
+            <label for="storage_cost_{{ w }}">Warehouse {{ w+1 }} Storage Cost (Per Unit):</label>
+            <input type="number" id="storage_cost_{{ w }}" name="storage_cost_{{ w }}" required><br>
+        {% endfor %}
+
+        <!-- Transportation Costs -->
+        <h2>Transportation Costs (Per Unit)</h2>
+        <h3>From Factories to Warehouses</h3>
+        {% for f in range(num_factories) %}
+            {% for w in range(num_warehouses) %}
+                <label for="trans_cost_fw_{{ f }}_{{ w }}">Factory {{ f+1 }} to Warehouse {{ w+1 }}:</label>
+                <input type="number" id="trans_cost_fw_{{ f }}_{{ w }}" name="trans_cost_fw_{{ f }}_{{ w }}" required><br>
+            {% endfor %}
+        {% endfor %}
+
+        <h3>From Factories to Customers</h3>
+        {% for f in range(num_factories) %}
+            {% for c in range(num_customers) %}
+                <label for="trans_cost_fc_{{ f }}_{{ c }}">Factory {{ f+1 }} to Customer {{ c+1 }}:</label>
+                <input type="number" id="trans_cost_fc_{{ f }}_{{ c }}" name="trans_cost_fc_{{ f }}_{{ c }}" required><br>
+            {% endfor %}
+        {% endfor %}
+
+        <h3>From Warehouses to Customers</h3>
+        {% for w in range(num_warehouses) %}
+            {% for c in range(num_customers) %}
+                <label for="trans_cost_wc_{{ w }}_{{ c }}">Warehouse {{ w+1 }} to Customer {{ c+1 }}:</label>
+                <input type="number" id="trans_cost_wc_{{ w }}_{{ c }}" name="trans_cost_wc_{{ w }}_{{ c }}" required><br>
+            {% endfor %}
+        {% endfor %}
+
+        <!-- Customer Demand -->
+        <h2>Demand (Per Product by Customer)</h2>
+        {% for p in range(num_products) %}
+            {% for c in range(num_customers) %}
+                <label for="demand_{{ p }}_{{ c }}">Product {{ p+1 }} for Customer {{ c+1 }}:</label>
+                <input type="number" id="demand_{{ p }}_{{ c }}" name="demand_{{ p }}_{{ c }}" required><br>
+            {% endfor %}
+        {% endfor %}
+
+        <button type="submit">Run Optimization</button>
+    </form>
+</body>
+</html>

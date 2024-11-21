@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimization Result</title>
+</head>
+<body>
+    <h1>Optimization Result</h1>
+
+    <!-- Handle different statuses: Infeasible, Unbounded, or Optimal -->
+    {% if result['status'] == "Infeasible" %}
+        <p><strong>Status: </strong> The model is infeasible. This means that it is impossible to meet all demand or constraints given the inputs.</p>
+    {% elif result['status'] == "Unbounded" %}
+        <p><strong>Status: </strong> The model is unbounded, meaning there is no limit to minimizing the costs. This could indicate a missing or incorrect constraint.</p>
+    {% else %}
+        <p><strong>Status: </strong> Optimal solution found.</p>
+        <p><strong>Total Cost: </strong> ${{ result['total_cost'] }}</p>
+        <p><strong>Production Cost: </strong> ${{ result['total_production_cost'] }}</p>
+        <p><strong>Storage Cost: </strong> ${{ result['total_storage_cost'] }}</p>
+        <p><strong>Transportation Cost: </strong> ${{ result['total_transport_cost'] }}</p>
+        <p><strong>Demand Fulfilled: </strong> {{ result['demand_fulfilled_percentage'] }}%</p>
+
+        <!-- Production Plan Table -->
+        <h2>Production Plan</h2>
+        {{ build_production_plan_table(result, num_products, num_factories) | safe }}
+
+        <!-- Distribution Plan (Factory to Warehouse) -->
+        <h2>Distribution Plan (Factory to Warehouse)</h2>
+        {{ build_transport_plan_table(result, 'transport_fw_summary', num_factories, num_warehouses, 'Factory', 'Warehouse') | safe }}
+
+        <!-- Distribution Plan (Factory to Customer) -->
+        <h2>Distribution Plan (Factory to Customer)</h2>
+        {{ build_transport_plan_table(result, 'transport_fc_summary', num_factories, num_customers, 'Factory', 'Customer') | safe }}
+
+        <!-- Distribution Plan (Warehouse to Customer) -->
+        <h2>Distribution Plan (Warehouse to Customer)</h2>
+        {{ build_transport_plan_table(result, 'transport_wc_summary', num_warehouses, num_customers, 'Warehouse', 'Customer') | safe }}
+
+        <!-- Final Inventory Table -->
+        <h2>Final Inventory by Factory and Warehouse</h2>
+        {{ result['final_inventory'] | safe }}
+
+        <!-- Summary of the optimization -->
+        <h3>Summary</h3>
+        <p>The supply chain optimization model used linear programming to minimize total costs, which include production, storage, and transportation costs. The total cost of the solution is ${{ result['total_cost'] }}. The solution ensures that {{ result['demand_fulfilled_percentage'] }}% of the demand is fulfilled for all customers. The production cost amounts to ${{ result['total_production_cost'] }}, while the storage cost is ${{ result['total_storage_cost'] }}. The transportation cost, which includes movement of products between factories, warehouses, and customers, is ${{ result['total_transport_cost'] }}.</p>
+        <p>The model generated an optimal plan for the number of units to be produced at each factory and transported to customers and warehouses. The final inventory levels at each factory and warehouse are presented in the table above. This inventory reflects the remaining units after fulfilling the demand and executing the transport plan.</p>
+
+    {% endif %}
+
+    <!-- Link to return to the main form -->
+    <a href="/">Run Another Optimization</a>
+</body>
+</html>
